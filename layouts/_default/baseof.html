@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary | plainify | truncate 150 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
+  <meta name="author" content="{{ site.Params.author }}">
+  <link rel="home" href="{{ "" | relURL }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+  {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">{{ end }}
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="{{ "" | relURL }}"><span class="brand-mark" aria-hidden="true">筆</span>{{ site.Title }}</a>
+      <nav class="nav">
+        {{ range (where site.Sections "Kind" "section").ByTitle }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+        <button class="theme-toggle" type="button" aria-label="밝게/어둡게 전환" onclick="toggleTheme()">◐</button>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">{{ block "main" . }}{{ end }}</main>
+  <footer class="site-footer">
+    <div class="wrap">© {{ now.Year }} {{ site.Params.author }} · 글 {{ len site.RegularPages }}편</div>
+  </footer>
+  <script>function toggleTheme(){var r=document.documentElement,c=r.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),n=c==="dark"?"light":"dark";r.dataset.theme=n;try{localStorage.setItem("theme",n)}catch(e){}}</script>
+  {{ if .Store.Get "hasMermaid" }}
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+    const dark = (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+    mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral", fontFamily: "Noto Sans KR, sans-serif" });
+  </script>
+  {{ end }}
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>

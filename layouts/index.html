@@ -1,0 +1,22 @@
+{{ define "main" }}
+<section class="hero">
+  <p class="eyebrow">{{ site.Params.author }}의 기록</p>
+  <h1>{{ site.Title }}</h1>
+  <p class="lede">{{ site.Params.intro }}</p>
+  {{ partial "search.html" . }}
+</section>
+
+{{ range (where site.Sections "Kind" "section").ByTitle }}
+<section class="shelf">
+  <div class="shelf-head">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <span class="count">{{ len .RegularPagesRecursive }}편</span>
+  </div>
+  <ol class="post-list">
+    {{ range first 12 (.RegularPagesRecursive.ByWeight) }}{{ partial "item.html" . }}{{ end }}
+  </ol>
+  {{ if gt (len .RegularPagesRecursive) 12 }}<a class="more" href="{{ .RelPermalink }}">{{ .Title }} 전체 보기 →</a>{{ end }}
+</section>
+{{ end }}
+{{ end }}
+{{ define "scripts" }}<script src="{{ "js/search.js" | relURL }}" defer></script>{{ end }}

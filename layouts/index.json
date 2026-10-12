@@ -1,0 +1,5 @@
+{{- $items := slice -}}
+{{- range where site.RegularPages "Type" "ne" "page" -}}
+{{- $items = $items | append (dict "t" .Title "u" (strings.TrimPrefix ("" | relURL) .RelPermalink) "s" .CurrentSection.Title "d" (.Date.Format "2006-01-02") "c" (.Plain | replaceRE `\s+` " ")) -}}
+{{- end -}}
+{{- $items | jsonify -}}

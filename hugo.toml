@@ -1,0 +1,38 @@
+# ── 사이트 기본 설정 ────────────────────────────────────────────
+# 사이트 주소 (GitHub에 올리면 자동으로 맞춰집니다)
+baseURL = "https://daehwankim-0916.github.io/"
+locale = "ko-KR"
+defaultContentLanguage = "ko"
+title = "DHKim 학습노트"
+hasCJKLanguage = true
+summaryLength = 110
+enableRobotsTXT = true
+disableKinds = ["taxonomy", "term"]
+
+[params]
+  author = "DHKim"
+  description = "물류관리사 시험 대비로 정리한 학습 자료 모음"
+  # 첫 화면 소개 문구
+  intro = "물류관리사 시험을 준비하며 정리한 글을 모아 두는 곳입니다. 법규 해설부터 물류관리 개론까지, 분류별로 찾아보거나 위 검색창으로 낱말을 찾아보세요."
+
+[markup.goldmark.renderer]
+  unsafe = true            # Word에서 변환된 형광펜·박스(HTML)를 그대로 보여 줌
+[markup.goldmark.parser]
+  wrapStandAloneImageWithinParagraph = false
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]   # JSON = 검색용 색인
+
+[pagination]
+  pagerSize = 50
+
+# content/ (직접 쓴 글)와 _generated/ (Word에서 변환된 글)를 함께 사용
+[[module.mounts]]
+  source = "content"
+  target = "content"
+[[module.mounts]]
+  source = "_generated"
+  target = "content"

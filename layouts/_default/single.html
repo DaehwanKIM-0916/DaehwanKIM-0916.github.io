@@ -1,0 +1,20 @@
+{{ define "main" }}
+<div class="article-layout{{ if .TableOfContents | plainify | strings.TrimSpace }} has-toc{{ end }}">
+<article class="article">
+  <header class="page-head">
+    <p class="crumbs"><a href="{{ "" | relURL }}">처음</a>{{ with .CurrentSection }}{{ if not .IsHome }} / <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}</p>
+    <h1>{{ .Title }}</h1>
+    <p class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006. 1. 2." }}</time> · 약 {{ .ReadingTime }}분</p>
+  </header>
+  <div class="content">{{ .Content }}</div>
+  {{ $list := .CurrentSection.RegularPages.ByWeight }}{{ $i := 0 }}{{ range $k, $p := $list }}{{ if eq $p $ }}{{ $i = $k }}{{ end }}{{ end }}
+  <nav class="prevnext">
+    {{ if gt $i 0 }}{{ with index $list (sub $i 1) }}<a class="prev" href="{{ .RelPermalink }}"><small>← 앞 글</small>{{ .Title }}</a>{{ end }}{{ else }}<span></span>{{ end }}
+    {{ if lt (add $i 1) (len $list) }}{{ with index $list (add $i 1) }}<a class="next" href="{{ .RelPermalink }}"><small>뒤 글 →</small>{{ .Title }}</a>{{ end }}{{ end }}
+  </nav>
+</article>
+{{ if .TableOfContents | plainify | strings.TrimSpace }}
+<aside class="toc"><details open><summary>목차</summary>{{ .TableOfContents }}</details></aside>
+{{ end }}
+</div>
+{{ end }}

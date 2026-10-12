@@ -1,0 +1,18 @@
+{{ define "main" }}
+<header class="page-head">
+  <p class="crumbs"><a href="{{ "" | relURL }}">처음</a> / {{ .Title }}</p>
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}<div class="content">{{ . }}</div>{{ end }}
+  <p class="meta">글 {{ len .RegularPagesRecursive }}편</p>
+</header>
+{{ $pages := .RegularPagesRecursive.ByWeight }}
+{{ $pag := .Paginate $pages }}
+<ol class="post-list">{{ range $pag.Pages }}{{ partial "item.html" . }}{{ end }}</ol>
+{{ if gt $pag.TotalPages 1 }}
+<nav class="pager">
+  {{ with $pag.Prev }}<a href="{{ .URL }}">← 이전</a>{{ end }}
+  <span>{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
+  {{ with $pag.Next }}<a href="{{ .URL }}">다음 →</a>{{ end }}
+</nav>
+{{ end }}
+{{ end }}
